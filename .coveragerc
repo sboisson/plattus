@@ -1,0 +1,13 @@
+[run]
+branch = True
+source =
+    plattus
+
+[paths]
+source =
+   src/plattus
+   .tox/*/lib/python*/site-packages/plattus
+   .tox/pypy/site-packages/plattus
+
+[report]
+show_missing = True

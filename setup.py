@@ -1,17 +1,14 @@
-import setuptools
-import sys
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import re
-import glob
-from os.path import basename, splitext
+
+import setuptools
+
 
 __version__, = re.findall(
     '__version__ = "(.*)"', open("src/plattus/__init__.py").read()
 )
-
-if sys.version_info[0] < 3:
-    import __builtin__ as builtins
-else:
-    import builtins
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -52,6 +49,5 @@ setuptools.setup(
     tests_require=EXTRAS_REQUIRE["tests"],
     extras_require=EXTRAS_REQUIRE,
     zip_safe=False,
-    include_package_data=True,
     package_data={"": ["*.lark"]},
 )
