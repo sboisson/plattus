@@ -14,8 +14,6 @@ matrix:
   include:
     - python: "2.7"
       env: TOXENV=py27
-    - python: "3.4"
-      env: TOXENV=py34
     - python: "3.5"
       env: TOXENV=py35
     - python: "3.6"
@@ -38,20 +36,12 @@ matrix:
     # Meta
     - python: "3.6"
       env: TOXENV=lint
-    - python: "3.6"
-      env: TOXENV=manifest
-    - python: "3.6"
-      env: TOXENV=docs
-    - python: "3.6"
-      env: TOXENV=readme
-    - python: "3.6"
-      env: TOXENV=changelog
-    - python: "3.6"
-      env: TOXENV=typing
 
   allow_failures:
     - python: "3.6-dev"
     - python: "3.7-dev"
+    - python: "pypy"
+    - python: "pypy3"
 
 
 install:
@@ -73,4 +63,3 @@ after_success:
 
 notifications:
   email: false
- 
