@@ -1,0 +1,111 @@
+// Based on:
+// * https://google.github.io/flatbuffers/md__schemas.html
+// * https://github.com/antlr/grammars-v4/blob/master/flatbuffers/FlatBuffers.g4
+
+
+// Parser rules
+
+schema : include* _schema_decl_list*
+
+_schema_decl_list : namespace_decl
+        | table_decl
+        | struct_decl
+        | enum_decl
+        | union_decl
+        | root_decl
+        | file_extension_decl
+        | file_identifier_decl
+        | custom_attribute_decl
+        | rpc_decl
+        | object
+
+
+include : "include" _string_constant ";"
+
+namespace_decl : "namespace" IDENT ( "." IDENT )* ";"
+
+custom_attribute_decl : "attribute" _string_constant ";"
+
+table_decl : documentation* "table" _fields_based_decl
+struct_decl : documentation* "struct" _fields_based_decl
+
+_fields_based_decl : IDENT attributes? "{" ( field_decl )* "}"
+
+
+enum_decl : documentation* "enum" IDENT ( ":" _type_union )? attributes? "{" _enumval_decl_list "}"
+
+union_decl : documentation* "union" IDENT attributes? "{" _enumval_decl_list "}"
+
+root_decl : "root_type" IDENT ";"
+
+field_decl : documentation* IDENT ":" _type_union ( "=" scalar )? attributes? ";"
+
+rpc_decl : documentation* "rpc_service" IDENT "{" rpc_method+ "}"
+
+rpc_method : documentation* IDENT "(" IDENT ")" ":" IDENT attributes? ";"
+
+// fixed original grammar: allow namespaces for IDENTs
+_type_union : type | vector
+
+type : BUILTIN_TYPE | _ns_ident
+vector : "[" (BUILTIN_TYPE | _ns_ident) "]"
+
+enumval_decl : _ns_ident ( "=" INTEGER_CONSTANT )?
+
+_enumval_decl_list : enumval_decl ( "," enumval_decl )* ","?
+
+attribute : IDENT ( ":" _single_value )?
+
+attributes : ( "(" attribute ( "," attribute )* ")" )
+
+// fix original grammar: enum values (IDENT) are allowed as well
+scalar : INTEGER_CONSTANT | FLOAT_CONSTANT | BOOLEAN_CONSTANT | IDENT
+
+object : "{" ident_with_value_list "}"
+
+ident_with_value : IDENT ":" value
+
+ident_with_value_list : ident_with_value ( "," ident_with_value )* ","?
+
+_single_value : scalar | _string_constant
+
+value : _single_value | object | "[" _value_list "]"
+
+_value_list : value( "," value )* ","?
+
+file_extension_decl : "file_extension" _string_constant ";"
+
+file_identifier_decl : "file_identifier" _string_constant ";"
+
+_ns_ident : IDENT ( "." IDENT )*
+
+_string_constant : "\"" STRING_CONSTANT? "\""
+
+documentation : _DOCUMENTATION_PREFIX LINE_STRING?
+
+// Lexer rules
+
+BUILTIN_TYPE : "bool"
+    | "byte" | "ubyte" | "int8" | "uint8"
+    | "short" | "ushort" | "int16" | "uint16"
+    | "int" | "uint" | "int32" | "uint32"
+    | "long" | "ulong" | "int64" | "uint64"
+    | "float" | "float32"
+    | "double" | "float64"
+    | "string"
+
+BOOLEAN_CONSTANT : "true" | "false"
+
+STRING_CONSTANT : STRING_INNER+
+
+LINE_STRING : /[^\r\n]+/
+
+_DOCUMENTATION_PREFIX : /\/{3,}/
+COMMENT : /\/{2}([^\/][^\r\n]+)?[\r\n]/
+
+%import common.CNAME -> IDENT
+%import common.SIGNED_INT -> INTEGER_CONSTANT
+%import common.SIGNED_FLOAT -> FLOAT_CONSTANT
+%import common.STRING_INNER
+%ignore /[ \t\r\n]/
+%ignore COMMENT
