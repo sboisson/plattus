@@ -1,19 +1,19 @@
-[![Build Status](https://travis-ci.org/sboisson/plattus.svg?branch=master)](https://travis-ci.org/sboisson/plattus)
-
 # Plattus
 
 Pythonic FlatBuffers.
 
+[![Build Status](https://travis-ci.org/sboisson/plattus.svg?branch=master)](https://travis-ci.org/sboisson/plattus)
+
 **FlatBuffers** is a cross platform serialization format architected for
 maximum memory efficiency. It allows you to directly access serialized data without parsing/unpacking it first, while still having great forwards/backwards compatibility.
 
-### Install Lark
+### Install Plattus
 
     $ pip install plattus
 
-### Related projects
+## Related projects
 
-* "Google's flatbuffers":https://github.com/google/flatbuffers
+* [Google's flatbuffers](https://github.com/google/flatbuffers)
 
 
 ## Licensing
