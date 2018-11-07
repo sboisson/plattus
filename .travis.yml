@@ -34,7 +34,7 @@ matrix:
       env: TOXENV=py37
 
     # Meta
-    - python: "3.6"
+    - python: "3.7"
       env: TOXENV=lint
 
   allow_failures:
